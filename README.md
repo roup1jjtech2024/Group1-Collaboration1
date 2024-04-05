@@ -1,3 +1,3 @@
 
 
-![alt text](3Tier-Architecture.jpeg)
+![3-Tier Architecture](image.png)
