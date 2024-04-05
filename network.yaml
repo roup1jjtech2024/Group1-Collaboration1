@@ -1,200 +1,21 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
-  this cloud formation create a VPC, a public subnet and a private subnet then
-  an IGW
+  This CloudFormation template creates a VPC, a public subnet, a private subnet, and an IGW
 Parameters:
   VPCCidr:
-    Description: 'CidrBlock for the VPC '
+    Description: 'CidrBlock for the VPC'
     Type: String
     Default: 10.0.0.0/16
-  PublicSubnet1CIDR:
-    Description: CidrBlock for the 1st PublicSN
-    Type: String
-    Default: 10.0.1.0/24
-  PublicSubnet2CIDR:
-    Description: CidrBlock for the 2nd PublicSN
-    Type: String
-    Default: 10.0.2.0/24
-  PrivatSubnet1CIDR:
-    Description: CidrBlock for the 1st privatSN
-    Type: String
-    Default: 10.0.3.0/24
-  PrivatSubnet2CIDR:
-    Description: CidrBlock for the 2nd privatSN
-    Type: String
-    Default: 10.0.4.0/24
-  Availabilityzone1:
-    Description: AZ1 for PublicSN1 and PrivateSN1
-    Type: String
-    Default: us-east-2a
-  Availabilityzone2:
-    Description: AZ2 for PublicSN2 and PrivateSN2
-    Type: String
-    Default: us-east-2b
-  PublicSecurityG:
-    Description: This SG will be for AZ1
-    Type: String
-    Default: Security group for public subnet
-  PrivatSecurityGr:
-    Description: This SG will be for AZ2
-    Type: String
-    Default: Security group for private subnet
-  ImageId:
-    Description: This is the ID AMI for the instnace
-    Type: String
-    Default: ami-01387af90a62e3c01
-  instanceType:
-    Description: ''
-    Type: String
-    Default: t2.micro
 Resources:
   JJTechVPC:
     Type: 'AWS::EC2::VPC'
     Properties:
       CidrBlock: !Ref VPCCidr
       Tags:
-        - Key: NAME
+        - Key: Name
           Value: JJTechVPC
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 3965c6bc-7fea-4cfc-8b45-96233e683391
-  JJTechIGW:
-    Type: 'AWS::EC2::InternetGateway'
-    Properties:
-      Tags:
-        - Key: NAME
-          Value: JJTechIGW
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 3e90e99e-322f-40b0-8cb9-b86fcb3ac9d4
-  AttachGateway:
-    Type: 'AWS::EC2::VPCGatewayAttachment'
-    Properties:
-      VpcId: !Ref JJTechVPC
-      InternetGatewayId: !Ref JJTechIGW
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: ec2e7d67-ecfc-4739-aa35-4c219f0db7ab
-  PublicSN1:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Ref Availabilityzone1
-      VpcId: !Ref JJTechVPC
-      CidrBlock: !Ref PublicSubnet1CIDR
-      Tags:
-        - Key: NAME
-          Value: PublicSN1
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: c33e971d-0776-4ce4-8a3a-1b9f24f5b922
-  PublicSN2:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Ref Availabilityzone2
-      VpcId: !Ref JJTechVPC
-      CidrBlock: !Ref PublicSubnet2CIDR
-      Tags:
-        - Key: NAME
-          Value: PublicSN2
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 9c63528a-8d5a-4c0e-af34-c52b90e0144c
-  PrivatSN1:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Ref Availabilityzone1
-      VpcId: !Ref JJTechVPC
-      CidrBlock: !Ref PrivatSubnet1CIDR
-      Tags:
-        - Key: NAME
-          Value: PrivatSN1
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: fc3c133c-005a-46c4-b220-884c888ddd6d
-  PrivatSN2:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      AvailabilityZone: !Ref Availabilityzone2
-      VpcId: !Ref JJTechVPC
-      CidrBlock: !Ref PrivatSubnet2CIDR
-      Tags:
-        - Key: NAME
-          Value: PrivatSN2
-  publicRT:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref JJTechVPC
-      Tags:
-        - Key: keyname
-          Value: valpublicRT
-  publicRout1:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref publicRT
-      DestinationCidrBlock:  0.0.0.0/0
-      GatewayId: !Ref JJTechIGW
-  pulicSN1RTassio:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref PublicSN1 
-      RouteTableId: !Ref publicRT  
-  publicRout2:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref publicRT
-      DestinationCidrBlock:  0.0.0.0/0
-      GatewayId: !Ref JJTechIGW
-  pulicSN1RTassio:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref PublicSN1
-      RouteTableId: !Ref publicRT        
-  privateRT:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: JJTechVPC
-      Tags:
-        - Key: NAME
-          Value: privateRT   
-  privateroute1:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref  privateRT
-      DestinationCidrBlock: 0.0.0.0/0
-  PrivateSN1assio:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref  PrivatSN1
-      RouteTableId: !Ref  privateRT  
-  NatGatewayId: !Ref NatGateway         
-  privateroute2:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref  privateRT
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway
-  PrivateSN1assio:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref  PrivatSN1
-      RouteTableId: !Ref  privateRT 
 
-NATGateway:
-   Type: AWS::EC2::NatGateway
-   Properties:
-      AllocationId: !GetAtt NATGatewayEIP.AllocationId
-      SubnetId: !Ref PublicSN1
-      Tags:
-      - Key: NAME
-        Value: NATGateway 
-NATGatewayEIP:
-   Type: AWS::EC2::EIP
-   Properties:
-      Domain: JJTechVPC
-RouteNATGateway:
-   DependsOn: NATGateway
-   Type: AWS::EC2::Route
-   Properties:
-      privateRT: !Ref privateRT 
-      DestinationCidrBlock: '0.0.0.0/0'
-      NatGatewayId: !Ref NATGateway
+Outputs:
+  VpcId:
+    Description: "ID of the created VPC"
+    Value: !Ref JJTechVPC
