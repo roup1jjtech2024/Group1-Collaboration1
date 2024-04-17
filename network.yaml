@@ -6,6 +6,24 @@ Parameters:
     Description: 'CidrBlock for the VPC'
     Type: String
     Default: 10.0.0.0/16
+
+    PublicSubnet2CIDR:
+    Description: CidrBlock for the 2nd PublicSN
+    Type: String
+    Default: 10.0.2.0/24
+  PublicSubnet1CIDR:
+    Description: CidrBlock for the 1st PublicSN
+    Type: String
+    Default: 10.0.1.0/24
+  PrivatSubnet1CIDR:
+    Description: CidrBlock for the 1st privatSN
+    Type: String
+    Default: 10.0.3.0/24
+  PrivatSubnet2CIDR:
+    Description: CidrBlock for the 2nd privatSN
+    Type: String
+    Default: 10.0.4.0/24
+    
 Resources:
   JJTechVPC:
     Type: 'AWS::EC2::VPC'
