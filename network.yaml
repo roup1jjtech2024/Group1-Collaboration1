@@ -23,6 +23,14 @@ Parameters:
     Description: CidrBlock for the 2nd privatSN
     Type: String
     Default: 10.0.4.0/24
+  Availabilityzone1:
+    Description: 'AZ1 for PublicSN1 and PrivateSN1 '
+    Type: String
+    Default: us-east-1a
+  Availabilityzone2:
+    Description: 'AZ2 for PublicSN2 and PrivateSN2 '
+    Type: String
+    Default: us-east-1b  
     
 Resources:
   JJTechVPC:
